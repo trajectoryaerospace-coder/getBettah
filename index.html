@@ -1,635 +1,797 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>For Zann 💖</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <style>
-    * {
-      touch-action: manipulation;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    body {
-      overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #050505;
-      color: white;
-    }
-
-    .page {
-      position: absolute;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .page.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* Floating particles background */
-    .particle {
-      position: absolute;
-      pointer-events: none;
-      border-radius: 50%;
-      animation: floatUp var(--duration) linear infinite;
-      opacity: 0.6;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(100vh) scale(0.3) rotate(0deg);
-        opacity: 0;
-      }
-      20% {
-        opacity: var(--max-opacity, 0.7);
-      }
-      100% {
-        transform: translateY(-100px) scale(1.2) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    /* Custom range slider styling for Page 1 */
-    .slider-thumb::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 0 20px rgba(236, 72, 153, 0.8), 0 0 10px rgba(255, 255, 255, 0.9);
-      cursor: pointer;
-      border: 3px solid #ec4899;
-      transition: transform 0.1s ease;
-    }
-
-    .slider-thumb::-webkit-slider-thumb:active {
-      transform: scale(1.25);
-    }
-
-    /* Pulse animation */
-    .pulse-glow {
-      animation: pulseGlow 2s infinite alternate;
-    }
-    @keyframes pulseGlow {
-      0% { filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.5)); }
-      100% { filter: drop-shadow(0 0 25px rgba(244, 63, 94, 0.9)); }
-    }
-
-    /* Page 3 timed sequence visibility */
-    .fade-item {
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 1.2s ease-out, transform 1.2s ease-out;
-    }
-    .fade-item.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Direct Text Gradient styling (No Box / Background) */
-    .gradient-text-dynamic {
-      background-clip: text !important;
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-      color: transparent !important;
-      transition: background 0.1s ease;
-      display: inline-block;
-    }
-  </style>
-</head>
-<body class="w-screen h-screen overflow-hidden bg-black text-white">
-
-  <!-- ==================== PAGE 1 ==================== -->
-  <div id="page1" class="page active bg-gradient-to-br from-purple-950 via-slate-900 to-pink-950 px-6 py-4">
-    <!-- Floating background hearts/sparkles -->
-    <div id="p1Particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
-
-    <div class="z-10 w-full max-w-xl flex flex-col items-center justify-between h-full max-h-[85vh]">
-      <!-- Header Title -->
-      <div class="text-center mt-2">
-        <h1 class="text-xl sm:text-2xl font-bold tracking-wide text-pink-200 opacity-90 drop-shadow">
-          how sorry am I? (me, uk ayushman)
-        </h1>
-      </div>
-
-      <!-- Main Display -->
-      <div class="flex flex-col items-center justify-center my-auto w-full">
-        <div id="percentText" class="text-5xl sm:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-200 transition-all duration-100">
-          0%
-        </div>
-        <div id="sorryFeedback" class="mt-4 text-lg sm:text-2xl font-semibold text-center text-pink-100 min-h-[3rem] flex items-center justify-center px-4 transition-all duration-200">
-          Slide it to see... 🥺
-        </div>
-      </div>
-
-      <!-- Slider Control -->
-      <div class="w-full px-4 mb-2 flex flex-col items-center gap-3">
-        <input 
-          type="range" 
-          id="apologySlider" 
-          min="0" 
-          max="1000" 
-          value="0" 
-          class="w-full h-4 bg-purple-900/60 rounded-lg appearance-none cursor-pointer accent-pink-500 slider-thumb border border-pink-500/30"
-        />
-        
-        <!-- Next Button (hidden until 1000%) -->
-        <button 
-          id="nextBtnP1" 
-          onclick="goToPage(2)"
-          class="hidden mt-1 px-8 py-2.5 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold rounded-full shadow-lg shadow-pink-500/50 hover:scale-105 active:scale-95 transition-all text-base animate-bounce"
-        >
-          Next ➡️
-        </button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ==================== PAGE 2 ==================== -->
-  <div id="page2" class="page bg-gradient-to-br from-cyan-950 via-slate-900 to-indigo-950 px-6 py-4">
-    <div id="p2Particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
-
-    <div class="z-10 w-full max-w-2xl flex flex-col items-center justify-between h-full max-h-[85vh]">
-      <!-- Header Title -->
-      <div class="text-center mt-2">
-        <h1 class="text-xl sm:text-2xl font-bold tracking-wide text-cyan-200 opacity-90 drop-shadow">
-          How quickly do I hope u get sm better
-        </h1>
-      </div>
-
-      <!-- Circular Gauge Dial Container -->
-      <div class="relative flex items-center justify-center my-auto">
-        <!-- Spinning Left Heart -->
-        <div id="leftHeart" class="text-3xl sm:text-5xl transform -translate-x-4 sm:-translate-x-8 transition-transform duration-200">
-          💖
-        </div>
-
-        <!-- Dial Outer Ring & Interactive Canvas/SVG -->
-        <div id="dialContainer" class="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center touch-none cursor-grab active:cursor-grabbing">
-          <!-- SVG Circular Track -->
-          <svg class="absolute inset-0 w-full h-full transform -rotate-90 pointer-events-none" viewBox="0 0 100 100">
-            <!-- Background Arc -->
-            <circle cx="50" cy="50" r="42" stroke="rgba(6, 182, 212, 0.2)" stroke-width="7" fill="transparent" />
-            <!-- Active Fill Arc -->
-            <circle id="dialProgressArc" cx="50" cy="50" r="42" stroke="url(#cyanGradient)" stroke-width="8" stroke-dasharray="263.89" stroke-dashoffset="263.89" stroke-linecap="round" fill="transparent" />
-            <defs>
-              <linearGradient id="cyanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#06b6d4" />
-                <stop offset="50%" stop-color="#3b82f6" />
-                <stop offset="100%" stop-color="#8b5cf6" />
-              </linearGradient>
-            </defs>
-          </svg>
-
-          <!-- Rotatable Knob Handle on Outer Ring -->
-          <div id="dialKnob" class="absolute w-8 h-8 bg-white border-2 border-cyan-400 rounded-full shadow-lg shadow-cyan-500/80 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center" style="top: 8px; left: 50%;">
-            <div class="w-2.5 h-2.5 bg-cyan-600 rounded-full"></div>
-          </div>
-
-          <!-- Central Text Display -->
-          <div class="z-10 text-center px-4 pointer-events-none">
-            <div id="dialValue" class="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-teal-100 to-indigo-200 drop-shadow">
-              10 days
-            </div>
-            <div class="text-xs text-cyan-300/70 mt-1 uppercase tracking-widest font-semibold">Drag dial clockwise 🔄</div>
-          </div>
-        </div>
-
-        <!-- Spinning Right Heart -->
-        <div id="rightHeart" class="text-3xl sm:text-5xl transform translate-x-4 sm:translate-x-8 transition-transform duration-200">
-          💖
-        </div>
-      </div>
-
-      <div class="text-xs sm:text-sm text-cyan-300/80 mb-2 font-light">
-        Turn the dial all the way clockwise!
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ==================== PAGE 3 ==================== -->
-  <div id="page3" class="page bg-slate-950 px-6 py-6 transition-colors duration-1000">
-    <div id="p3Stars" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
-
-    <div id="page3Content" class="z-10 flex flex-col items-center justify-center text-center max-w-2xl mx-auto my-auto space-y-6">
-      
-      <!-- Top Line: Side-by-side names -->
-      <div id="p3Line1Container" class="flex items-center justify-center space-x-2 sm:space-x-3 text-2xl sm:text-4xl font-extrabold">
-        <span id="p3Line1" class="fade-item text-slate-100">Heywoo Zann,</span>
-        <span id="p3Line1Suffix" class="fade-item text-pink-400 font-serif italic">my lovee</span>
-      </div>
-
-      <!-- Middle Line -->
-      <div id="p3Line2" class="fade-item text-lg sm:text-2xl font-medium text-cyan-100 max-w-lg leading-relaxed">
-        I'm always here for you, i only need u and i hope you get better
-      </div>
-
-      <!-- Bottom Line -->
-      <div id="p3Line3" class="fade-item text-xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-rose-300 to-purple-300">
-        take care of yourself please, i love you.
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- ==================== PAGE 4 ==================== -->
-  <div id="page4" class="page bg-gradient-to-br from-rose-950 via-red-950 to-orange-950 px-6 py-6 transition-colors duration-500">
-    <div id="p4Particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
-
-    <div class="z-10 w-full max-w-2xl flex flex-col items-center justify-center my-auto space-y-6 text-center">
-      
-      <!-- Counter Item 1 -->
-      <div id="cBox1" class="fade-item w-full flex flex-col items-center">
-        <div class="text-sm sm:text-lg font-medium text-rose-200/90 mb-1">My love for you:</div>
-        <div id="counter1" class="gradient-text-dynamic text-3xl sm:text-5xl font-black tracking-tight">0</div>
-      </div>
-
-      <!-- Counter Item 2 -->
-      <div id="cBox2" class="fade-item w-full flex flex-col items-center">
-        <div class="text-sm sm:text-lg font-medium text-rose-200/90 mb-1">How much I miss you:</div>
-        <div id="counter2" class="gradient-text-dynamic text-3xl sm:text-5xl font-black tracking-tight">0</div>
-      </div>
-
-      <!-- Counter Item 3 -->
-      <div id="cBox3" class="fade-item w-full flex flex-col items-center">
-        <div class="text-sm sm:text-lg font-medium text-rose-200/90 mb-1">How much I want to be next to you:</div>
-        <div id="counter3" class="gradient-text-dynamic text-3xl sm:text-5xl font-black tracking-tight">0</div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- ==================== PAGE 5 ==================== -->
-  <div id="page5" class="page bg-gradient-to-br from-purple-950 via-slate-900 to-rose-950 px-4 py-4">
-    <div class="z-10 w-full max-w-md flex flex-col items-center justify-between h-full max-h-[90vh]">
-      
-      <div class="text-center mt-2">
-        <h2 id="p5Title" class="text-xl sm:text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 animate-pulse">
-          BTW, WE NEED TO DO THIS 🎬💖
-        </h2>
-      </div>
-
-      <!-- YouTube Embed Container -->
-      <div class="relative w-full aspect-[9/16] max-h-[55vh] rounded-2xl overflow-hidden border-2 border-pink-500/40 shadow-2xl shadow-pink-950/80 my-auto bg-black">
-        <iframe 
-          id="ytShort"
-          class="w-full h-full"
-          src="https://www.youtube.com/embed/JtXzIS1RMpY?enablejsapi=1&rel=0&modestbranding=1" 
-          title="YouTube video player" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          allowfullscreen>
-        </iframe>
-      </div>
-
-      <!-- Finish Video Button -->
-      <button 
-        id="finishVideoBtn"
-        onclick="triggerFinalCallPopup()"
-        class="mb-2 px-6 py-2.5 bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white font-bold rounded-full shadow-lg shadow-pink-500/50 hover:scale-105 active:scale-95 transition-all text-sm sm:text-base flex items-center gap-2"
-      >
-        <span>Done watching!</span> ✨
-      </button>
-
-    </div>
-
-    <!-- Final "So, Call me?" Popup Card -->
-    <div id="finalCallModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-500">
-      <div class="bg-gradient-to-br from-pink-900 via-slate-900 to-purple-950 border-2 border-pink-400/50 p-6 sm:p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl shadow-pink-500/40 transform scale-90 transition-transform duration-500" id="modalCard">
-        <div class="text-4xl mb-3 animate-bounce">📞💖</div>
-        <h3 class="text-2xl sm:text-3xl font-black text-pink-100 mb-2">So, Call me?</h3>
-        <p class="text-sm text-pink-200/80 mb-6">I'm waiting for your call, my love! 🥰</p>
-        <button 
-          onclick="alert('Calling Ayushman... 📲💖')" 
-          class="w-full py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-extrabold rounded-2xl shadow-lg shadow-pink-500/50 hover:scale-105 active:scale-95 transition-all text-lg flex items-center justify-center gap-2"
-        >
-          <span>Call Now</span> 📱
-        </button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- JavaScript Logic -->
-  <script>
-    // State management
-    let currentPage = 1;
-
-    // Helper: Page Switcher
-    function goToPage(pageNum) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      const target = document.getElementById(`page${pageNum}`);
-      if (target) {
-        target.classList.add('active');
-        currentPage = pageNum;
-        if (pageNum === 3) startPage3Sequence();
-        if (pageNum === 4) startPage4Sequence();
-      }
-    }
-
-    // ================= PAGE 1 logic =================
-    const slider = document.getElementById('apologySlider');
-    const percentText = document.getElementById('percentText');
-    const sorryFeedback = document.getElementById('sorryFeedback');
-    const nextBtnP1 = document.getElementById('nextBtnP1');
-    const p1 = document.getElementById('page1');
-
-    const sorryLevels = [
-      { max: 0, text: "Slide it to see... 🥺", color: "from-pink-300 via-purple-300 to-indigo-200" },
-      { max: 99, text: "getting sorry...", color: "from-pink-300 to-purple-300" },
-      { max: 199, text: "extremely sorry", color: "from-pink-400 to-rose-400" },
-      { max: 299, text: "too sorry", color: "from-rose-400 to-red-400" },
-      { max: 399, text: "sorry sorry sorryyyyy", color: "from-red-400 to-pink-500" },
-      { max: 499, text: "thats a lot", color: "from-pink-500 to-purple-500" },
-      { max: 599, text: "thisss mucchhh", color: "from-purple-500 to-indigo-500" },
-      { max: 699, text: "ooooooo", color: "from-indigo-500 to-cyan-400" },
-      { max: 799, text: "see smm", color: "from-cyan-400 to-teal-400" },
-      { max: 899, text: "almost getting there", color: "from-teal-400 to-emerald-400" },
-      { max: 999, text: "so closee", color: "from-emerald-400 to-amber-300" },
-      { max: 1000, text: "im this sorryyy 💖💖💖", color: "from-amber-300 via-rose-400 to-pink-500" }
-    ];
-
-    slider.addEventListener('input', (e) => {
-      const val = parseInt(e.target.value);
-      percentText.textContent = `${val}%`;
-
-      const matched = sorryLevels.find(lvl => val <= lvl.max) || sorryLevels[sorryLevels.length - 1];
-      sorryFeedback.textContent = matched.text;
-      
-      percentText.className = `text-5xl sm:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r ${matched.color} transition-all duration-100`;
-
-      if (val === 1000) {
-        nextBtnP1.classList.remove('hidden');
-        confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
-      } else {
-        nextBtnP1.classList.add('hidden');
-      }
-    });
-
-    // Particle generator for Page 1 & 2 & 4
-    function createParticles(containerId, count, symbols) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      for (let i = 0; i < count; i++) {
-        const el = document.createElement('div');
-        el.className = 'particle';
-        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
-        el.textContent = symbol;
-        el.style.left = `${Math.random() * 100}%`;
-        el.style.fontSize = `${Math.random() * 14 + 10}px`;
-        el.style.setProperty('--duration', `${Math.random() * 8 + 6}s`);
-        el.style.setProperty('--max-opacity', `${Math.random() * 0.5 + 0.3}`);
-        el.style.animationDelay = `${Math.random() * 5}s`;
-        container.appendChild(el);
-      }
-    }
-    createParticles('p1Particles', 15, ['✨', '💖', '🌸']);
-    createParticles('p2Particles', 15, ['⭐', '💙', '✨']);
-    createParticles('p4Particles', 18, ['❤️', '🔥', '✨', '💖']);
-
-
-    // ================= PAGE 2 logic (360 Circular Dial) =================
-    const timeSteps = [
-      "10 days", "5 days", "2 days", "10 hours", "5 hours", 
-      "10 minutes", "5 minutes", "1 minute", "3 seconds", "2 seconds", "1 second", "GET BETTER!!!"
-    ];
-
-    const dialContainer = document.getElementById('dialContainer');
-    const dialProgressArc = document.getElementById('dialProgressArc');
-    const dialKnob = document.getElementById('dialKnob');
-    const dialValue = document.getElementById('dialValue');
-    const leftHeart = document.getElementById('leftHeart');
-    const rightHeart = document.getElementById('rightHeart');
-
-    let isDraggingDial = false;
-    let currentAngle = 0; // 0 to 360 degrees
-    let p2Completed = false;
-
-    const totalDash = 263.89; // 2 * PI * 42
-
-    function updateDial(angle) {
-      currentAngle = Math.max(0, Math.min(360, angle)); // Strictly cap between 0 and 360
-      
-      const progressRatio = currentAngle / 360;
-      const offset = totalDash * (1 - progressRatio);
-      dialProgressArc.style.strokeDashoffset = offset;
-
-      // Position Knob on Circle (radius = 42% of 50% = 42 in SVG viewbox -> 84px in 200px container)
-      const rad = (currentAngle - 90) * (Math.PI / 180);
-      const containerRadius = dialContainer.clientWidth / 2;
-      const knobRadius = containerRadius * 0.84; // stroke radius ratio
-      const knobX = containerRadius + knobRadius * Math.cos(rad);
-      const knobY = containerRadius + knobRadius * Math.sin(rad);
-
-      dialKnob.style.left = `${knobX}px`;
-      dialKnob.style.top = `${knobY}px`;
-
-      // Map angle to step
-      const stepIndex = Math.min(
-        timeSteps.length - 1, 
-        Math.floor(progressRatio * timeSteps.length)
-      );
-      dialValue.textContent = timeSteps[stepIndex];
-
-      // Heart rotations
-      leftHeart.style.transform = `translateX(-1rem) rotate(${-currentAngle * 1.5}deg) scale(${1 + progressRatio * 0.3})`;
-      rightHeart.style.transform = `translateX(1rem) rotate(${currentAngle * 1.5}deg) scale(${1 + progressRatio * 0.3})`;
-
-      // Trigger transition once capped at 360 / GET BETTER!!!
-      if (currentAngle >= 355 && !p2Completed) {
-        p2Completed = true;
-        dialValue.textContent = "GET BETTER!!!";
-        dialValue.className = "text-3xl sm:text-4xl font-black text-pink-300 animate-bounce";
-        confetti({ particleCount: 60, spread: 70, origin: { y: 0.5 } });
-
-        setTimeout(() => {
-          goToPage(3);
-        }, 3000); // 3 seconds timeout
-      }
-    }
-
-    function calcAngleFromEvent(e) {
-      const rect = dialContainer.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-      let radians = Math.atan2(clientY - centerY, clientX - centerX);
-      let degrees = radians * (180 / Math.PI) + 90; // Adjust so top is 0deg
-      if (degrees < 0) degrees += 360;
-      return degrees;
-    }
-
-    function handlePointerDown(e) {
-      if (p2Completed) return;
-      isDraggingDial = true;
-      updateDial(calcAngleFromEvent(e));
-    }
-
-    function handlePointerMove(e) {
-      if (!isDraggingDial || p2Completed) return;
-      updateDial(calcAngleFromEvent(e));
-    }
-
-    function handlePointerUp() {
-      isDraggingDial = false;
-    }
-
-    dialContainer.addEventListener('mousedown', handlePointerDown);
-    window.addEventListener('mousemove', handlePointerMove);
-    window.addEventListener('mouseup', handlePointerUp);
-
-    dialContainer.addEventListener('touchstart', handlePointerDown, { passive: true });
-    window.addEventListener('touchmove', handlePointerMove, { passive: true });
-    window.addEventListener('touchend', handlePointerUp);
-
-
-    // ================= PAGE 3 logic =================
-    function startPage3Sequence() {
-      // Create stars background
-      const starsContainer = document.getElementById('p3Stars');
-      starsContainer.innerHTML = '';
-      for (let i = 0; i < 40; i++) {
-        const star = document.createElement('div');
-        star.className = 'particle';
-        star.textContent = Math.random() > 0.5 ? '✨' : '⭐';
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.fontSize = `${Math.random() * 10 + 8}px`;
-        star.style.setProperty('--duration', `${Math.random() * 6 + 4}s`);
-        star.style.animationDelay = `${Math.random() * 3}s`;
-        starsContainer.appendChild(star);
-      }
-
-      // Step by step fade sequence
-      const l1 = document.getElementById('p3Line1');
-      const l1Suffix = document.getElementById('p3Line1Suffix');
-      const l2 = document.getElementById('p3Line2');
-      const l3 = document.getElementById('p3Line3');
-
-      // Reset
-      [l1, l1Suffix, l2, l3].forEach(el => el.classList.remove('show'));
-
-      // Sequence
-      setTimeout(() => l1.classList.add('show'), 400);
-      setTimeout(() => l1Suffix.classList.add('show'), 1600);
-      setTimeout(() => l2.classList.add('show'), 3200);
-      setTimeout(() => l3.classList.add('show'), 5200);
-
-      // Fade into space gradient background
-      setTimeout(() => {
-        document.getElementById('page3').className = "page active bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900 px-6 py-6 transition-colors duration-1000";
-      }, 1000);
-
-      // Auto advance 3s after last line fades in (5200 + 3000 = 8200ms)
-      setTimeout(() => {
-        if (currentPage === 3) goToPage(4);
-      }, 8500);
-    }
-
-
-    // ================= PAGE 4 logic (Counters to 1 Trillion + Text Gradient Shifts) =================
-    let p4Started = false;
-
-    function startPage4Sequence() {
-      if (p4Started) return;
-      p4Started = true;
-
-      const cBox1 = document.getElementById('cBox1');
-      const cBox2 = document.getElementById('cBox2');
-      const cBox3 = document.getElementById('cBox3');
-
-      const cnt1 = document.getElementById('counter1');
-      const cnt2 = document.getElementById('counter2');
-      const cnt3 = document.getElementById('counter3');
-
-      // Fade in sequence & start counting up
-      cBox1.classList.add('show');
-      runTrillionCounter(cnt1, () => {
-        cBox2.classList.add('show');
-        runTrillionCounter(cnt2, () => {
-          cBox3.classList.add('show');
-          runTrillionCounter(cnt3, () => {
-            confetti({ particleCount: 100, spread: 100, origin: { y: 0.6 } });
-            
-            // Wait 3 seconds, then move to PAGE 5 (Video Page)
-            setTimeout(() => {
-              goToPage(5);
-            }, 3000);
-          });
-        });
-      });
-    }
-
-    function runTrillionCounter(element, onComplete) {
-      const targetVal = 1000000000000; // 1 Trillion
-      const duration = 1800; // ms
-      const startTime = performance.now();
-
-      function animateCounter(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Exponential ease out for fast counter effect
-        const currentVal = Math.floor(Math.pow(progress, 3) * targetVal);
-        element.textContent = currentVal.toLocaleString();
-
-        // Dynamic text gradient shift based on counter progress (NO box background)
-        const hue1 = Math.floor(progress * 180 + 330) % 360; // Pink to Gold to Cyan
-        const hue2 = (hue1 + 40) % 360;
-        element.style.background = `linear-gradient(135deg, hsl(${hue1}, 100%, 75%), hsl(${hue2}, 100%, 65%))`;
-
-        if (progress < 1) {
-          requestAnimationFrame(animateCounter);
-        } else {
-          // Transition to Infinity symbol
-          element.textContent = "∞ (Infinity)";
-          element.style.background = "linear-gradient(135deg, #fde047, #f43f5e)";
-          element.classList.add("scale-110", "drop-shadow-lg");
-          if (onComplete) onComplete();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>How sorry am I?</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Fredoka', 'Nunito', sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+            background-color: #0f172a;
         }
-      }
 
-      requestAnimationFrame(animateCounter);
-    }
+        /* Page 1 Slider Styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 24px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.45);
+            outline: none;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.15), 0 0 15px rgba(244, 63, 94, 0.3);
+            cursor: pointer;
+        }
 
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6), 0 2px 6px rgba(0, 0, 0, 0.2);
+            border: 4px solid #f43f5e;
+            transition: transform 0.15s ease;
+        }
 
-    // ================= PAGE 5 logic (Final Video & Call Popup) =================
-    function triggerFinalCallPopup() {
-      confetti({ particleCount: 80, spread: 80, origin: { y: 0.5 } });
-      const modal = document.getElementById('finalCallModal');
-      const card = document.getElementById('modalCard');
-      modal.classList.remove('opacity-0', 'pointer-events-none');
-      card.classList.remove('scale-90');
-      card.classList.add('scale-100');
-    }
+        /* Page 2 Circular Dial Control */
+        .circular-slider {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            touch-action: none;
+            user-select: none;
+        }
 
-    // Initial setup on layout load
-    window.addEventListener('resize', () => {
-      if (currentPage === 2) updateDial(currentAngle);
-    });
-    updateDial(0);
-  </script>
+        @media (min-height: 400px) {
+            .circular-slider {
+                width: 280px;
+                height: 280px;
+            }
+        }
+
+        /* Floating background items */
+        .bg-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp 4s linear infinite;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0.6) rotate(0deg);
+                opacity: 0;
+            }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% {
+                transform: translateY(-20vh) scale(1.4) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Rising stars for Page 3 */
+        .star-particle {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: starRise infinite linear;
+        }
+
+        @keyframes starRise {
+            0% {
+                transform: translateY(100vh) scale(0.2);
+                opacity: 0;
+            }
+            30% { opacity: 0.9; }
+            80% { opacity: 0.9; }
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Screen Shake effect */
+        .shake {
+            animation: shake 0.3s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-3px, 3px) rotate(-1deg); }
+            50% { transform: translate(3px, -3px) rotate(1deg); }
+            75% { transform: translate(-3px, -3px) rotate(-1deg); }
+        }
+
+        /* Spinning animation for hearts */
+        .spin-heart {
+            animation: spinHeart 3s linear infinite;
+        }
+        .spin-heart-reverse {
+            animation: spinHeartRev 3s linear infinite;
+        }
+
+        @keyframes spinHeart {
+            from { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+        @keyframes spinHeartRev {
+            from { transform: rotate(360deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            to { transform: rotate(0deg) scale(1); }
+        }
+
+        /* Transitions between views */
+        .page-view {
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+        }
+
+        .page-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+            position: absolute;
+            inset: 0;
+        }
+
+        /* Page 4 Counter Numbers with Pure Text Dynamic Gradient (No Box) */
+        .gradient-counter {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(135deg, #ffffff, #f43f5e);
+            display: inline-block;
+            transition: transform 0.15s ease;
+        }
+
+        /* Video Container Styling */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 260px;
+            aspect-ratio: 9/16;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Portrait overlay alert */
+        @media (orientation: portrait) {
+            .portrait-warning {
+                display: flex !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen w-screen overflow-hidden flex flex-col justify-between p-2 sm:p-4 text-slate-800 transition-colors duration-700 relative" id="appBody">
+
+    <!-- Ambient floating particle container -->
+    <div id="particleContainer" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
+    <div id="starContainer" class="absolute inset-0 overflow-hidden pointer-events-none z-0 hidden"></div>
+
+    <!-- Portrait Orientation Warning -->
+    <div class="portrait-warning hidden fixed inset-0 z-50 bg-rose-600/95 backdrop-blur-lg flex-col items-center justify-center text-white p-6 text-center">
+        <div class="animate-bounce mb-4 text-6xl">📱🔄</div>
+        <h2 class="text-3xl font-extrabold mb-2">Turn sideways!</h2>
+        <p class="text-base text-rose-100">Best enjoyed on iPhone landscape mode ✨</p>
+    </div>
+
+    <!-- ================= PAGE 1 ================= -->
+    <div id="page1" class="page-view flex flex-col justify-between h-full w-full min-h-screen z-10">
+        <!-- Header Section -->
+        <header class="text-center pt-1">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-rose-600 drop-shadow-md">
+                how sorry am I? <span class="text-xs sm:text-base font-bold text-rose-500 bg-white/70 px-3 py-0.5 rounded-full shadow-sm inline-block ml-1">(me, uk ayushman)</span>
+            </h1>
+        </header>
+
+        <!-- Main Stage Section -->
+        <main class="flex-1 flex flex-col items-center justify-center relative my-auto w-full max-w-4xl mx-auto px-4">
+            
+            <!-- Central Percentage Box -->
+            <div id="displayCard" class="text-center px-6 py-4 rounded-3xl bg-white/50 backdrop-blur-xl border border-white/70 shadow-2xl transition-all duration-150 flex flex-col items-center justify-center max-w-xl w-full">
+                <div class="flex items-baseline justify-center">
+                    <span id="percentVal" class="text-6xl sm:text-7xl md:text-8xl font-black text-rose-600 tracking-tight drop-shadow-md transition-all duration-100">0</span>
+                    <span id="percentSymbol" class="text-3xl sm:text-5xl font-black text-rose-500 ml-1"> %</span>
+                </div>
+                
+                <div id="reactionText" class="text-lg sm:text-xl md:text-2xl font-black text-rose-800 bg-white/85 px-6 py-2 rounded-2xl shadow-md border-2 border-rose-300 mt-2 transition-all duration-150 inline-block transform scale-100">
+                    drag the slider! 👇
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer Controls & Next Button -->
+        <footer class="w-full max-w-3xl mx-auto px-4 pb-3 flex flex-col items-center gap-3">
+            <div class="bg-white/60 backdrop-blur-xl p-4 sm:p-5 rounded-3xl shadow-xl border border-white/80 flex flex-col gap-2 w-full">
+                <div class="flex justify-between items-center text-xs sm:text-sm font-extrabold text-rose-500 px-2">
+                    <span>0%</span>
+                    <span>250%</span>
+                    <span>500%</span>
+                    <span>750%</span>
+                    <span class="text-rose-600 font-black animate-pulse">1000% 💖</span>
+                </div>
+
+                <div class="relative flex items-center py-1">
+                    <input type="range" id="sorrySlider" min="0" max="1000" value="0" step="1">
+                </div>
+            </div>
+
+            <!-- Next Button (Appears at 1000%) -->
+            <button id="nextBtn1" onclick="goToPage2()" class="hidden transform scale-0 transition-all duration-300 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-lg font-black px-8 py-3 rounded-full shadow-lg border-2 border-white/60 animate-bounce active:scale-95">
+                Next ➡️
+            </button>
+        </footer>
+    </div>
+
+    <!-- ================= PAGE 2 ================= -->
+    <div id="page2" class="page-view page-hidden flex flex-col justify-between h-full w-full min-h-screen z-10">
+        <header class="text-center pt-2">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-cyan-200 drop-shadow-md">
+                How quickly do I hope u get sm better
+            </h1>
+        </header>
+
+        <!-- Center Stage with Circular Slider & Spinning Hearts -->
+        <main class="flex-1 flex items-center justify-center relative w-full max-w-4xl mx-auto px-4">
+            
+            <div class="flex items-center justify-center gap-4 sm:gap-8 w-full">
+                <!-- Left Spinning Heart -->
+                <div id="leftHeart" class="spin-heart text-4xl sm:text-6xl md:text-7xl filter drop-shadow-lg opacity-90 transition-all">
+                    💖
+                </div>
+
+                <!-- Interactive Circular Dial Gauge -->
+                <div id="circularDial" class="circular-slider flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                        <!-- Track Background -->
+                        <circle cx="60" cy="60" r="50" stroke="rgba(255,255,255,0.2)" stroke-width="10" fill="none" />
+                        <!-- Active Arc Track -->
+                        <circle id="dialProgressArc" cx="60" cy="60" r="50" stroke="url(#cyanGradient)" stroke-width="10" fill="none" stroke-dasharray="314.15" stroke-dashoffset="314.15" stroke-linecap="round" />
+                        
+                        <defs>
+                            <linearGradient id="cyanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#38bdf8" />
+                                <stop offset="50%" stop-color="#818cf8" />
+                                <stop offset="100%" stop-color="#f43f5e" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+
+                    <!-- Draggable Circular Handle Knob -->
+                    <div id="dialHandle" class="absolute w-10 h-10 bg-white rounded-full border-4 border-cyan-400 shadow-xl cursor-pointer flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75">
+                        <div class="w-3 h-3 bg-cyan-500 rounded-full"></div>
+                    </div>
+
+                    <!-- Inner Display (No box/card, just text) -->
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
+                        <div id="dialDisplay" class="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-wider drop-shadow-lg">
+                            10 days
+                        </div>
+                        <div class="text-xs text-cyan-300 font-bold mt-1 opacity-80">
+                            drag around 🔄
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Spinning Heart -->
+                <div id="rightHeart" class="spin-heart-reverse text-4xl sm:text-6xl md:text-7xl filter drop-shadow-lg opacity-90 transition-all">
+                    💖
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="w-full text-center pb-4 text-cyan-200/70 text-xs font-semibold">
+            Turn the dial clockwise to rush time forward ✨
+        </footer>
+    </div>
+
+    <!-- ================= PAGE 3 ================= -->
+    <div id="page3" class="page-view page-hidden flex flex-col items-center justify-center h-full w-full min-h-screen z-10">
+        <div id="page3Content" class="flex flex-col items-center justify-center text-center max-w-2xl px-6 py-8 space-y-6 w-full my-auto">
+            
+            <!-- Line 1: Header -->
+            <div id="p3Line1" class="opacity-0 transform translate-y-4 transition-all duration-1000 flex flex-wrap items-center justify-center text-center gap-2 sm:gap-3 w-full">
+                <span class="text-3xl sm:text-4xl md:text-5xl font-black text-white drop-shadow-lg">Heywoo Zann,</span>
+                <span id="p3Line1Next" class="opacity-0 transform translate-x-3 transition-all duration-1000 text-3xl sm:text-4xl md:text-5xl font-black text-pink-400 drop-shadow-lg">my lovee</span>
+            </div>
+
+            <!-- Line 2: Middle Text -->
+            <div id="p3Line2" class="opacity-0 transform translate-y-4 transition-all duration-1000 text-xl sm:text-2xl md:text-3xl font-bold text-slate-100 bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/20 shadow-2xl max-w-xl text-center w-full">
+                I'm always here for you, i only need u and i hope you get better
+            </div>
+
+            <!-- Line 3: Bottom Text -->
+            <div id="p3Line3" class="opacity-0 transform translate-y-4 transition-all duration-1000 text-2xl sm:text-3xl md:text-4xl font-black text-rose-300 drop-shadow-md text-center w-full">
+                take care of yourself please, i love you.
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= PAGE 4 ================= -->
+    <div id="page4" class="page-view page-hidden flex flex-col items-center justify-center h-full w-full min-h-screen z-10 overflow-hidden py-4">
+        <div id="page4Content" class="flex flex-col items-center justify-center text-center max-w-3xl px-6 py-2 space-y-4 sm:space-y-5 w-full my-auto">
+            
+            <!-- Section 1 -->
+            <div id="p4Sec1" class="opacity-0 transform translate-y-6 transition-all duration-700 flex flex-col items-center justify-center text-center w-full">
+                <div class="text-lg sm:text-xl md:text-2xl font-extrabold text-rose-100 drop-shadow-md">
+                    My love for you:
+                </div>
+                <div id="p4Num1" class="gradient-counter text-3xl sm:text-5xl md:text-6xl font-black drop-shadow-xl tracking-tight mt-0.5">
+                    0
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div id="p4Sec2" class="opacity-0 transform translate-y-6 transition-all duration-700 flex flex-col items-center justify-center text-center w-full">
+                <div class="text-lg sm:text-xl md:text-2xl font-extrabold text-rose-100 drop-shadow-md">
+                    How much I miss you:
+                </div>
+                <div id="p4Num2" class="gradient-counter text-3xl sm:text-5xl md:text-6xl font-black drop-shadow-xl tracking-tight mt-0.5">
+                    0
+                </div>
+            </div>
+
+            <!-- Section 3 -->
+            <div id="p4Sec3" class="opacity-0 transform translate-y-6 transition-all duration-700 flex flex-col items-center justify-center text-center w-full">
+                <div class="text-lg sm:text-xl md:text-2xl font-extrabold text-rose-100 drop-shadow-md">
+                    How much I want to be next to you:
+                </div>
+                <div id="p4Num3" class="gradient-counter text-3xl sm:text-5xl md:text-6xl font-black drop-shadow-xl tracking-tight mt-0.5">
+                    0
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= PAGE 5 (VIDEO & FINALE) ================= -->
+    <div id="page5" class="page-view page-hidden flex flex-col items-center justify-center h-full w-full min-h-screen z-10 overflow-y-auto py-4">
+        <div id="p4VideoSec" class="flex flex-col items-center justify-center text-center w-full max-w-xl my-auto px-4">
+            <div class="text-2xl sm:text-3xl md:text-4xl font-black text-amber-300 drop-shadow-lg tracking-wide mb-3 animate-pulse">
+                BTW, WE NEED TO DO THIS
+            </div>
+            <div class="video-container mb-4">
+                <iframe 
+                    id="ytPlayer"
+                    class="w-full h-full" 
+                    src="https://www.youtube.com/embed/JtXzIS1RMpY?enablejsapi=1&autoplay=1&rel=0" 
+                    title="YouTube Short" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <button onclick="showCallMeModal()" class="bg-gradient-to-r from-rose-500 to-amber-500 text-white font-extrabold px-8 py-3 rounded-full shadow-xl border-2 border-white/50 hover:scale-105 active:scale-95 transition-all text-base sm:text-lg">
+                Done watching? Click here! 💖
+            </button>
+        </div>
+
+        <!-- "So, Call me?" Popup Modal -->
+        <div id="callMeModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+            <div class="bg-gradient-to-br from-rose-600 to-pink-700 text-white p-6 sm:p-8 rounded-3xl border-4 border-white/40 shadow-2xl text-center max-w-sm w-full transform animate-bounce">
+                <div class="text-6xl mb-3">📞💖</div>
+                <h2 class="text-3xl sm:text-4xl font-black mb-4 drop-shadow-lg">So, Call me?</h2>
+                <div class="flex gap-3 justify-center">
+                    <button onclick="alert('Calling Ayushman... 📲❤️')" class="bg-white text-rose-600 font-black px-6 py-3 rounded-full text-lg shadow-md hover:bg-rose-50 active:scale-95 transition-all">
+                        Yes! Call Now 📱
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Controller Logic -->
+    <script>
+        // App State
+        let currentPage = 1;
+        
+        // Page 1 Elements
+        const sorrySlider = document.getElementById('sorrySlider');
+        const percentVal = document.getElementById('percentVal');
+        const reactionText = document.getElementById('reactionText');
+        const displayCard = document.getElementById('displayCard');
+        const nextBtn1 = document.getElementById('nextBtn1');
+        const appBody = document.getElementById('appBody');
+        const particleContainer = document.getElementById('particleContainer');
+        const starContainer = document.getElementById('starContainer');
+
+        let lastTriggeredConfetti = false;
+
+        // Page 1 Feedback Logic
+        function getFeedback(val) {
+            if (val === 0) return "drag the slider! 👇";
+            if (val < 100) return "a little sorry...";
+            if (val < 200) return "extremely sorry";
+            if (val < 300) return "too sorry";
+            if (val < 400) return "sorry sorry sorryyyyy";
+            if (val < 500) return "thats a lot";
+            if (val < 600) return "thisss mucchhh";
+            if (val < 700) return "ooooooo";
+            if (val < 800) return "see smm";
+            if (val < 900) return "almost getting there";
+            if (val < 1000) return "so closee";
+            return "im this sorryyy 💖✨🔥";
+        }
+
+        function updatePage1UI() {
+            if (currentPage !== 1) return;
+            const val = parseInt(sorrySlider.value, 10);
+            percentVal.textContent = val;
+            
+            const newText = getFeedback(val);
+            if (reactionText.textContent !== newText) {
+                reactionText.textContent = newText;
+                reactionText.style.transform = "scale(1.1) rotate(-1deg)";
+                setTimeout(() => { reactionText.style.transform = "scale(1.0) rotate(0deg)"; }, 100);
+            }
+
+            const cardScale = 1 + (val / 1000) * 0.12;
+            displayCard.style.transform = `scale(${cardScale})`;
+
+            const ratio = val / 1000;
+            if (val === 1000) {
+                appBody.style.background = 'linear-gradient(135deg, #ff2a5f, #ff6584, #ff8da1, #c084fc)';
+                appBody.classList.add('shake');
+                nextBtn1.classList.remove('hidden');
+                setTimeout(() => {
+                    nextBtn1.classList.remove('scale-0');
+                    nextBtn1.classList.add('scale-100');
+                }, 50);
+            } else {
+                appBody.classList.remove('shake');
+                nextBtn1.classList.add('scale-0');
+                const hue1 = Math.round(340 - ratio * 40);
+                const lightness = Math.round(85 - ratio * 25);
+                appBody.style.background = `linear-gradient(135deg, hsl(${hue1}, 100%, ${lightness}%), hsl(320, 90%, ${lightness + 5}%), hsl(280, 80%, ${lightness - 5}%))`;
+            }
+
+            if (val === 1000 && !lastTriggeredConfetti) {
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
+                }
+                lastTriggeredConfetti = true;
+            } else if (val < 1000) {
+                lastTriggeredConfetti = false;
+            }
+        }
+
+        sorrySlider.addEventListener('input', updatePage1UI);
+
+        // Navigation to Page 2
+        function goToPage2() {
+            currentPage = 2;
+            document.getElementById('page1').classList.add('page-hidden');
+            document.getElementById('page2').classList.remove('page-hidden');
+            appBody.classList.remove('shake');
+            appBody.style.background = 'linear-gradient(135deg, #0f172a, #0284c7, #4f46e5, #0f172a)';
+            initPage2CircularSlider();
+        }
+
+        // Page 2 Circular Dial Logic
+        const dialTimes = [
+            "10 days", "5 days", "2 days", 
+            "10 hours", "5 hours", "10 minutes", 
+            "5 minutes", "1 minute", "3 seconds", 
+            "2 seconds", "1 second", "GET BETTER!!!"
+        ];
+
+        let dialAngle = 0; // 0 to 360 degrees
+        let isDraggingDial = false;
+        let page2AutoTriggered = false;
+
+        function initPage2CircularSlider() {
+            const dial = document.getElementById('circularDial');
+            const handle = document.getElementById('dialHandle');
+            const arc = document.getElementById('dialProgressArc');
+            const display = document.getElementById('dialDisplay');
+            const leftHeart = document.getElementById('leftHeart');
+            const rightHeart = document.getElementById('rightHeart');
+
+            const radius = 50;
+            const circumference = 2 * Math.PI * radius;
+            arc.style.strokeDasharray = `${circumference}`;
+
+            function setAngle(deg) {
+                // Strictly clamp angle between 0 and 360 degrees
+                dialAngle = Math.max(0, Math.min(360, deg));
+                
+                // Position knob handle along the circular path
+                const rad = (dialAngle - 90) * (Math.PI / 180);
+                const r = dial.offsetWidth / 2;
+                const hx = r + r * Math.cos(rad);
+                const hy = r + r * Math.sin(rad);
+
+                handle.style.left = `${hx}px`;
+                handle.style.top = `${hy}px`;
+
+                // Update SVG arc offset
+                const progress = dialAngle / 360;
+                const offset = circumference - (progress * circumference);
+                arc.style.strokeDashoffset = offset;
+
+                // Update text display based on step
+                const stepIndex = Math.min(dialTimes.length - 1, Math.floor(progress * dialTimes.length));
+                display.textContent = dialTimes[stepIndex];
+
+                // Heart Spin Speed based on dial rotation
+                const spinDuration = Math.max(0.4, 3 - progress * 2.5);
+                leftHeart.style.animationDuration = `${spinDuration}s`;
+                rightHeart.style.animationDuration = `${spinDuration}s`;
+
+                // Dynamic background glow on Page 2
+                appBody.style.background = `linear-gradient(135deg, #0f172a, hsl(${190 + progress * 150}, 85%, ${25 + progress * 20}%), #0f172a)`;
+
+                // Auto transition ONLY when user reaches >=355° ("GET BETTER!!!")
+                if (dialAngle >= 355 && !page2AutoTriggered) {
+                    page2AutoTriggered = true;
+                    if (typeof confetti === 'function') {
+                        confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+                    }
+                    setTimeout(() => {
+                        goToPage3();
+                    }, 3000);
+                }
+            }
+
+            function calcAngleFromEvent(e) {
+                const rect = dial.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                let angle = Math.atan2(clientY - cy, clientX - cx) * (180 / Math.PI) + 90;
+                if (angle < 0) angle += 360;
+                return angle;
+            }
+
+            function onPointerDown(e) {
+                if (page2AutoTriggered) return;
+                isDraggingDial = true;
+                const angle = calcAngleFromEvent(e);
+                setAngle(angle);
+            }
+
+            function onPointerMove(e) {
+                if (!isDraggingDial || page2AutoTriggered) return;
+                const angle = calcAngleFromEvent(e);
+                setAngle(angle);
+            }
+
+            function onPointerUp() {
+                isDraggingDial = false;
+            }
+
+            dial.addEventListener('mousedown', onPointerDown);
+            window.addEventListener('mousemove', onPointerMove);
+            window.addEventListener('mouseup', onPointerUp);
+
+            dial.addEventListener('touchstart', onPointerDown, { passive: true });
+            window.addEventListener('touchmove', onPointerMove, { passive: true });
+            window.addEventListener('touchend', onPointerUp);
+
+            setAngle(0);
+        }
+
+        // Navigation to Page 3
+        function goToPage3() {
+            currentPage = 3;
+            document.getElementById('page2').classList.add('page-hidden');
+            document.getElementById('page3').classList.remove('page-hidden');
+            
+            // Deep space star vibe gradient
+            appBody.style.background = 'radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)';
+            
+            // Activate rising star particles
+            initStarField();
+
+            // Sequenced Text Animation
+            const p3Line1 = document.getElementById('p3Line1');
+            const p3Line1Next = document.getElementById('p3Line1Next');
+            const p3Line2 = document.getElementById('p3Line2');
+            const p3Line3 = document.getElementById('p3Line3');
+
+            // Timeline steps:
+            // 0s: Fade in "Heywoo Zann,"
+            setTimeout(() => {
+                p3Line1.classList.remove('opacity-0', 'translate-y-4');
+            }, 500);
+
+            // +1s: Fade in "my lovee"
+            setTimeout(() => {
+                p3Line1Next.classList.remove('opacity-0', 'translate-x-3');
+            }, 1500);
+
+            // +1.5s: Slide line 1 up slightly & fade in line 2
+            setTimeout(() => {
+                p3Line2.classList.remove('opacity-0', 'translate-y-4');
+            }, 3000);
+
+            // +1.8s: Fade in line 3 ("take care of yourself...")
+            setTimeout(() => {
+                p3Line3.classList.remove('opacity-0', 'translate-y-4');
+            }, 4800);
+
+            // 3 seconds after page 3 sequence completes -> Move to Page 4
+            setTimeout(() => {
+                goToPage4();
+            }, 7800);
+        }
+
+        // Init Star field for Page 3
+        function initStarField() {
+            starContainer.classList.remove('hidden');
+            starContainer.innerHTML = '';
+            for (let i = 0; i < 45; i++) {
+                const star = document.createElement('div');
+                star.className = 'star-particle';
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                starContainer.appendChild(star);
+            }
+        }
+
+        // Navigation to Page 4 (Finale Counter Sequence)
+        function goToPage4() {
+            currentPage = 4;
+            document.getElementById('page3').classList.add('page-hidden');
+            document.getElementById('page4').classList.remove('page-hidden');
+            starContainer.classList.add('hidden');
+
+            // Initial Warm Red gradient
+            appBody.style.background = 'linear-gradient(135deg, #450a0a, #881337, #9f1239, #450a0a)';
+
+            // Elements
+            const p4Sec1 = document.getElementById('p4Sec1');
+            const p4Num1 = document.getElementById('p4Num1');
+
+            const p4Sec2 = document.getElementById('p4Sec2');
+            const p4Num2 = document.getElementById('p4Num2');
+
+            const p4Sec3 = document.getElementById('p4Sec3');
+            const p4Num3 = document.getElementById('p4Num3');
+
+            // Rapid count to 1 TRILLION with dynamic text gradient and background shifting
+            function runCounter(element, secIndex, callback) {
+                const target = 1000000000000; // 1 Trillion
+                const duration = 1600; // ms
+                const startTime = performance.now();
+
+                function step(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Cubic ease-in acceleration
+                    const currentVal = Math.floor(Math.pow(progress, 3) * target);
+                    element.textContent = currentVal.toLocaleString();
+
+                    // Dynamic text gradient shift directly on the counter numbers
+                    const hueStart = (secIndex * 40 + progress * 120) % 360;
+                    const hueEnd = (hueStart + 60) % 360;
+                    element.style.backgroundImage = `linear-gradient(135deg, hsl(${hueStart}, 100%, 75%), hsl(${hueEnd}, 100%, 60%), #ffffff)`;
+
+                    // Dynamic background shift
+                    const bgHue = Math.floor(secIndex * 25 + progress * 30);
+                    appBody.style.background = `linear-gradient(135deg, hsl(${340 + bgHue}, 85%, 20%), hsl(${350 + bgHue}, 90%, 35%), hsl(${310 + bgHue}, 80%, 25%))`;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(step);
+                    } else {
+                        element.textContent = "1,000,000,000,000";
+                        setTimeout(() => {
+                            element.textContent = "∞ (Infinity)";
+                            element.style.backgroundImage = 'linear-gradient(135deg, #fef08a, #f59e0b, #ffffff)';
+                            element.classList.add('scale-110');
+                            if (typeof confetti === 'function') {
+                                confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+                            }
+                            if (callback) callback();
+                        }, 300);
+                    }
+                }
+                requestAnimationFrame(step);
+            }
+
+            // Sequential Execution of Section Counters
+            setTimeout(() => {
+                p4Sec1.classList.remove('opacity-0', 'translate-y-6');
+                runCounter(p4Num1, 0, () => {
+                    setTimeout(() => {
+                        p4Sec2.classList.remove('opacity-0', 'translate-y-6');
+                        runCounter(p4Num2, 1, () => {
+                            setTimeout(() => {
+                                p4Sec3.classList.remove('opacity-0', 'translate-y-6');
+                                runCounter(p4Num3, 2, () => {
+                                    // Smoothly transition to Page 5 after counters finish
+                                    setTimeout(() => {
+                                        goToPage5();
+                                    }, 2000);
+                                });
+                            }, 500);
+                        });
+                    }, 500);
+                });
+            }, 500);
+        }
+
+        // Navigation to Page 5 (YouTube Video & Finale Call Me Modal)
+        function goToPage5() {
+            currentPage = 5;
+            document.getElementById('page4').classList.add('page-hidden');
+            document.getElementById('page5').classList.remove('page-hidden');
+
+            appBody.style.background = 'linear-gradient(135deg, #18181b, #881337, #4c0519, #09090b)';
+            
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+            }
+
+            // Auto show modal after 18 seconds of video
+            setTimeout(() => {
+                showCallMeModal();
+            }, 18000);
+        }
+
+        function showCallMeModal() {
+            const modal = document.getElementById('callMeModal');
+            modal.classList.remove('hidden');
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 200, spread: 140, origin: { y: 0.5 } });
+            }
+        }
+
+        // Ambient Floating Particles logic
+        function createParticle() {
+            if (currentPage === 3) return;
+            const particle = document.createElement('div');
+            particle.className = 'bg-particle text-2xl sm:text-3xl';
+            
+            const emojis = currentPage === 4 
+                ? ['❤️', '💖', '🔥', '✨', '🌹', '💌']
+                : ['🥺', '🌸', '✨', '💐', '💕', '⭐'];
+
+            particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            particle.style.left = `${Math.random() * 95}%`;
+            particle.style.animationDuration = `${Math.random() * 2 + 2}s`;
+            particleContainer.appendChild(particle);
+
+            setTimeout(() => { particle.remove(); }, 4000);
+        }
+
+        setInterval(createParticle, 500);
+
+        window.onload = function() {
+            updatePage1UI();
+        };
+    </script>
 </body>
 </html>
